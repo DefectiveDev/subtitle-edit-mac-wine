@@ -24,36 +24,21 @@ echo "3. Paste it here and press Enter or leave blank to skip"
 echo "Example: http://download.videolan.org/pub/videolan/vlc/3.0.21/win64/vlc-3.0.21-win64.zip"
 read VLCURL
 
-# echo "Thank you, proceeding with installation..."
-
-# Install Homebrew
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-# Install the gcenx/wine build
-brew tap gcenx/wine
-brew install tesseract
-brew install --cask wine-crossover
-brew install winetricks
-
-export WINEPREFIX=${HOME}/.wine-se/
-
-# Install .NET 4.8
-winetricks -q --force dotnet48
-winetricks -q --force lavfilters
-winetricks -q --force win10
-winetricks -q --force d3dx9
-
 # Install Subtitle Edit portable
-curl -L -o "$dir/se.zip" "$SEZIPURL"
-unzip "$dir/se.zip" -d "$WINEPREFIX/drive_c/Program Files/Subtitle Edit/"
-rm "$dir/se.zip"
+if [ -n "${SEZIPURL}" ]; then
+  echo "Installing Subtitle..."
+  curl -L -o "$dir/se.zip" "$SEZIPURL"
+  unzip "$dir/se.zip" -d "$WINEPREFIX/drive_c/Program Files/Subtitle Edit/"
+  rm "$dir/se.zip"
+fi
 
 # install vlc
-curl -L -o "$dir/vlc.zip" "$VLCURL"
-unzip "$dir/vlc.zip" -d "$WINEPREFIX/drive_c/Program Files/VLC64/"
-rm "dir/vlc.zip"
-
-cp "$dir/subtitleeditw" "/usr/local/bin"
+if [ -n "${VLCURL}" ]; then
+  echo "Installing vlc..."
+  curl -L -o "$dir/vlc.zip" "$VLCURL"
+  unzip "$dir/vlc.zip" -d "$WINEPREFIX/drive_c/Program Files/VLC64/"
+  rm "dir/vlc.zip"
+fi
 
 echo "Ready! Now open Terminal.app and type"
 echo "subtitleeditw"
